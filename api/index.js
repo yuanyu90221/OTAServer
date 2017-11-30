@@ -6,6 +6,7 @@ const router = Router()
 const jwt = require('jsonwebtoken')
 const {info, warn, error} = require('../logger/log4js')
 const OTAUsersDao = require('../dao/otaUsers').OTAUsersDao
+const otaSecrets = require('../api/otaSecrets')
 // router.use(function (req, res, next){
 //   jwt.verify()
 // })
@@ -16,4 +17,5 @@ router.get('/users', (req, res, next) =>{
     res.json({err: err.message})
   })
 })
+router.use(otaSecrets)
 module.exports = router
