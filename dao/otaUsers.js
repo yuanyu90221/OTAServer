@@ -9,6 +9,9 @@ const OTAUsersDao = {
       userInfo.userId = seq+1
       return OTAUsers.insertMany(userInfo, callback)
     })
+  },
+  findUser: (criteria, callback) => {
+    return OTAUsers.find(criteria, callback)
   }
 }
 module.exports.OTAUsersDao = OTAUsersDao
