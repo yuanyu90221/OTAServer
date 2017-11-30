@@ -1,0 +1,10 @@
+{
+	"domainName":"localhost",
+	"port":27017,
+	"user":"yuanyu",
+	"passwd": {
+		"content":"1022f15f444c4ba59c",
+		"tag":"20TNt3U/oaElJCIb2QJpww=="
+	},
+	"dbname":"test"
+}

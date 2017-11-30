@@ -1,0 +1,27 @@
+{
+  "name": "otaserver",
+  "version": "1.0.0",
+  "description": "a OTA server with JWT",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "OTA",
+    "server",
+    "JWT"
+  ],
+  "author": "json",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "body-parser": "^1.18.2",
+    "crypto": "^1.0.1",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "jsonwebtoken": "^8.1.0",
+    "log4js": "^1.1.1",
+    "moment": "^2.19.3",
+    "mongoose": "^4.13.5"
+  }
+}
