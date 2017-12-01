@@ -7,7 +7,9 @@ const bodyParser = require('body-parser')
 const {SECRET} = require('./config/constants.json')
 const {info, warn, error} = require('./logger/log4js')
 const session = require('express-session')
+const favicon = require('express-favicon')
 const api = require('./api')
+const path = require('path')
 app.use(bodyParser.json())
 app.use(session({
   secret: 'OTAServer',
@@ -15,7 +17,9 @@ app.use(session({
   saveUninitialized: true,
   cookie: { maxAge: 60000 }
 }))
-
+app.use(favicon(path.join(__dirname,'favicon.ico')))
+app.use(express.static(path.join(__dirname,'/')))
+app.use('/static', express.static('static'))
 app.set('port', port)
 app.set('SECRET', SECRET)
 // import api that we use

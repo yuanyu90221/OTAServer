@@ -8,7 +8,7 @@ const schema = new Schema({
     require: true
   },
   passwd: {
-    type: String,
+    type: Object,
     require: true
   },
   role: {
@@ -25,14 +25,14 @@ const schema = new Schema({
   toJSON: {
     transform: (doc, ret) => {
       delete ret._id
-      delete ret.passwd
+      // delete ret.passwd
       delete ret.__v
     }
   },
   toObject: {
     transform: (doc, ret) => {
       delete ret._id
-      delete ret.passwd
+      // delete ret.passwd
       delete ret.__v
     }
   }

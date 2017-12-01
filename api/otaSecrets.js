@@ -16,7 +16,7 @@ router.post('/authenticate', (req, res, next) => {
       if (!result) {
         res.json({err: 'Authentication Error'})
       } else if (result) {
-        if (result.passwd.content == CodeManager.encrypt(req.body.passwd).content) {
+        if (result[0].passwd.content !== CodeManager.encryptIV(req.body.passwd).content) {
           res.json({err: 'Authentication Error'})
         } else {
           let user = {username: result.username, role: result.role}
