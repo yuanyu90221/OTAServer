@@ -10,6 +10,7 @@ const session = require('express-session')
 const favicon = require('express-favicon')
 const api = require('./api')
 const path = require('path')
+app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 app.use(session({
   secret: 'OTAServer',

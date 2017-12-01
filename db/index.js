@@ -15,7 +15,7 @@ let DBManager = {
     info.info(`domainName: ${domainName}, port: ${port}, user: ${user}, passwd: ${passwd.content}
     dbname: ${dbname}`)
     let tag = new Buffer(passwd.tag, 'base64')
-    console.log(tag)
+    info.info(tag)
     let context = {content: passwd.content, tag: tag}
     let decryptedPasswd = CodeManager.decryptIV(context)
     return mongoose.createConnection(`mongodb://${user}:${decryptedPasswd}@${domainName}:${port}/${dbname}`)

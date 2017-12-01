@@ -19,13 +19,15 @@ router.post('/authenticate', (req, res, next) => {
         if (result[0].passwd.content !== CodeManager.encryptIV(req.body.passwd).content) {
           res.json({err: 'Authentication Error'})
         } else {
-          let user = {username: result.username, role: result.role}
+          let user = {username: result[0].username, role: result[0].role}
           let token = jwt.sign(user, SECRET, {
             expiresIn: 60 * 60 * 24
           })
           res.json({
             msg: 'token delivered',
-            token: token
+            token: token,
+            username: result[0].username,
+            role: result[0].role
           })
         }
       } 
