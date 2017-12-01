@@ -12,7 +12,6 @@ $(document).ready(function(){
       passwd: this.passwd.value,
       username: this.username.value
     }
-    // console.log(signInFormValid(data))
     if (signInFormValid(this)){
       $('#processing-modal').modal('show')
       $.ajax({
@@ -24,7 +23,7 @@ $(document).ready(function(){
         },
         success: function (data) {
           console.log(data)
-          if (!data.token) {
+          if (data.token) {
             window.token = data.token
           }
           $('#processing-modal').modal('hide')
@@ -33,6 +32,12 @@ $(document).ready(function(){
     } else {
       return
     }
+  })
+  //
+  $('#getAllSecrets').off('click')
+  $('#getAllSecrets').on('click', function(e){
+    console.log('click All Secrets')
+    getAllSecrets()
   })
 })
 
@@ -51,7 +56,22 @@ function signInFormValid(formObj) {
   }) 
   return result 
 }
-
-function register() {
-  
+/**
+ * get All Secrets
+ * 
+ */
+function getAllSecrets() {
+  var token = window.token || ''
+  $('#processing-modal').modal('show')
+  $.ajax({
+    type: 'GET',
+    url: '/api/getAllSecrets',
+    data: {
+      token: token
+    },
+    success: function (data) {
+      console.log(data)
+      $('#processing-modal').modal('hide')
+    }
+  })
 }
