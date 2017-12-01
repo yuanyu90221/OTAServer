@@ -1,34 +1,38 @@
 'use strict'
 $(document).ready(function(){
-  console.log('test')  
+  console.log('test')
+  $('.form-signin').off('submit')  
   $('.form-signin').submit(function(e){
     e.preventDefault();
     // console.log('form-submit')
-    console.log('passwd:',this.passwd.value)
-    console.log('username:',this.username.value)
-    console.log('isCache:',this.isCache.checked)
+    // console.log('passwd:',this.passwd.value)
+    // console.log('username:',this.username.value)
+    // console.log('isCache:',this.isCache.checked)
     var data =  {
       passwd: this.passwd.value,
       username: this.username.value
     }
-    console.log(signInFormValid(data))
-    // $.ajax({
-      
-    // })
-
-    $('#processing-modal').modal('show')
-    $.ajax({
-      type: 'POST',
-      url: '/api/user',
-      data: {
-        username: data.username,
-        passwd: data.passwd
-      },
-      success: function (data) {
-        console.log(data)
-        $('#processing-modal').modal('hide')
-      }
-    })
+    // console.log(signInFormValid(data))
+    if (signInFormValid(this)){
+      $('#processing-modal').modal('show')
+      $.ajax({
+        type: 'POST',
+        url: '/api/user',
+        data: {
+          username: data.username,
+          passwd: data.passwd
+        },
+        success: function (data) {
+          console.log(data)
+          if (!data.token) {
+            window.token = data.token
+          }
+          $('#processing-modal').modal('hide')
+        }
+      })
+    } else {
+      return
+    }
   })
 })
 
@@ -46,4 +50,8 @@ function signInFormValid(formObj) {
     }
   }) 
   return result 
+}
+
+function register() {
+  
 }
