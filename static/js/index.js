@@ -24,7 +24,6 @@ $(document).ready(function(){
         username: data.username,
         passwd: data.passwd
       },
-      // dataType: 'application/json',
       success: function (data) {
         console.log(data)
         $('#processing-modal').modal('hide')

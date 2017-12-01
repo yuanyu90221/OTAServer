@@ -13,9 +13,6 @@ router.get('/users', (req, res, next) =>{
   })
 })
 router.post('/user', (req, res) => {
-  console.log(req.body)
-  // console.log(req.params)
-  // console.log(req.query)
   if(req.body.username && req.body.passwd) {
     return axios.post('http://localhost:7000/api/authenticate',{
         username: req.body.username,
@@ -23,11 +20,9 @@ router.post('/user', (req, res) => {
       }
     ).then((result)=>{
       let data = result.data
-      console.log(data)
       if (data.err) {
         res.json({err: data.err})
       } else {
-        console.log('before return')
         res.json({token: data.token, username: data.username, role: data.role})
       }
     }).catch(err=> {
