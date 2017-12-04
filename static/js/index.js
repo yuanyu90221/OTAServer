@@ -27,8 +27,14 @@ $(document).ready(function(){
             window.token = data.token
             $('#loginForm').remove()
           }
-          
+          if (data.err) {
+            alert(data.err)
+          }
           $('#processing-modal').modal('hide')
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          $('#processing-modal').modal('hide')
+          alert(errorThrown.message)
         }
       })
     } else {
@@ -75,6 +81,10 @@ function getAllSecrets() {
       console.log(data)
       appendData(data)
       $('#processing-modal').modal('hide')
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      $('#processing-modal').modal('hide')
+      alert( 'secret with error' )
     }
   })
 }
