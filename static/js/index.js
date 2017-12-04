@@ -25,7 +25,9 @@ $(document).ready(function(){
           console.log(data)
           if (data.token) {
             window.token = data.token
+            $('#loginForm').remove()
           }
+          
           $('#processing-modal').modal('hide')
         }
       })
