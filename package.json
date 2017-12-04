@@ -19,6 +19,7 @@
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "crypto": "^1.0.1",
+    "datatables": "^1.10.13",
     "express": "^4.16.2",
     "express-favicon": "^2.0.0",
     "express-session": "^1.15.6",

@@ -71,6 +71,7 @@ function getAllSecrets() {
     },
     success: function (data) {
       console.log(data)
+      appendData(data)
       $('#processing-modal').modal('hide')
     }
   })
