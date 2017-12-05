@@ -26,6 +26,7 @@ $(document).ready(function(){
           if (data.token) {
             window.token = data.token
             $('#loginForm').remove()
+            getAllSecrets()
           }
           if (data.err) {
             alert(data.err)
@@ -42,12 +43,12 @@ $(document).ready(function(){
     }
   })
   //
-  $('#getAllSecrets').off('click')
-  $('#getAllSecrets').on('click', function(e){
-    console.log('click All Secrets')
-    // alert('test')
-    getAllSecrets()
-  })
+  // $('#getAllSecrets').off('click')
+  // $('#getAllSecrets').on('click', function(e){
+  //   console.log('click All Secrets')
+  //   // alert('test')
+  //   getAllSecrets()
+  // })
 })
 
 /**

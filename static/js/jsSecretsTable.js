@@ -15,7 +15,7 @@ $(document).ready(function(){
       },
       success: function(data) {
         console.log(data)
-        appendData(data)
+        getAllSecrets()
         $('#processing-modal').modal('hide')
         $('#modify-modal').modal('hide')      
       },
