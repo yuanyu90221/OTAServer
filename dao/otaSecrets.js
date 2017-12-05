@@ -2,7 +2,7 @@ const OTAUsers = require('../models/otaUsers').OTAUsers
 const OTASecrets = require('../models/otaSecrets').OTASecrets
 const {info, error, warn} = require('../logger/log4js')
 const OTASecretsDao = {
-  upsertSecret: (userId, secret, callback) => {
+  upsertSecret: (userId, secret, isUpdate, callback) => {
     // check UserId is Valid
     OTAUsers.findOne({userId: userId}).then(data=>{
       info.info(data)
@@ -14,11 +14,13 @@ const OTASecretsDao = {
           return data
         }).then(data=>{
           info.info(data)
-          if(data && data.length!==0){
+          if(isUpdate || (data && data.length!==0)) {
+            console.log('data update')
             info.info('data update')
-            return OTASecrets.findOneAndUpdate({userId: userId}, {$set: {secret: secret}} , callback)
+            return OTASecrets.findOneAndUpdate({userId: userId}, {$set: {secret: secret, modifiedDate: new Date()}} , callback)
           }
           else {
+            console.log('data insert')
             info.info('data insert')
             return OTASecrets.insertMany({userId: userId, secret: secret}, callback)
           }
@@ -36,6 +38,10 @@ const OTASecretsDao = {
   getAllSecrets: (callback) => {
     info.info(`get all Secrets`)
     return OTASecrets.find({}, callback)
+  },
+  getCurrentSecret: (criteria, callback) => {
+    info.info(criteria)
+    return OTASecrets.find(criteria, callback)
   }
 }
 

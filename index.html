@@ -53,28 +53,44 @@
       <div class="container secTbl">
         <button class="btn btn-primary" id="getAllSecrets">getAllSecrets</button>
       </div>
-      <!-- Static Modal -->
-      <div class="modal modal-static fade" id="processing-modal">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-body">
-              <div class="text-center">
-                <h4>Processing... <button type="button" class="close" style="float: none;" data-dismiss="modal" aria-hidden="true">×</button></h4>
-              </div>
+      
+      <!-- Editor Form -->
+      <div class="container secTbl" id="secretsTbl">
+      </div>
+      <!-- Footer -->
+      <footer>&copy;Coolbitx copyright</footer>
+    </div>
+    <!-- Static Modal -->
+    <div class="modal modal-static fade" id="processing-modal" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="text-center">
+              <h4>Processing... <button type="button" class="close" style="float: none;" data-dismiss="modal" aria-hidden="true">×</button></h4>
             </div>
           </div>
         </div>
       </div>
-      <!-- Editor Form -->
-      <div class="container secTbl">
-          <!-- <span class="span" id="secretsTbl"></span> -->
-          <div class="well" id="secretsTbl">
-            <div class="panel-heading"></div>
-            <div class="panel-body"></div>
+    </div>
+    <!-- Modify Secret Form -->
+    <div class="modal modal-static fade" id="modify-modal" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h2 style="display:inline;">Change Secret</h2>
+          <div style="display:inline;float: right;" data-dismiss="modal" aria-hidden="true">&times;</div>
+        </div>
+        <div class="modal-content">
+          <div class="modal-body" id="editForm">
+              <form class="form-modify">
+                <!-- <h2 class="form-modify-heading">Modify Secret</h2> -->
+                <input type="hidden" name="userId">
+                <label for="secret">Secret:</label><input type="text" class="input-block-level" name="secret" placeholder="secret">
+                <button class="btn btn-large btn-primary" type="submit" id="modifySecret">Modify Secret</button>
+              </form>
+            <button class="btn btn-default" style="float: none;" data-dismiss="modal" aria-hidden="true">Cancel</button>
           </div>
+        </div>
       </div>
-      <!-- Footer -->
-      <footer>&copy;Coolbitx copyright</footer>
     </div>
 </body>
 </html>

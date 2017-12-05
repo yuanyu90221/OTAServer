@@ -21,5 +21,23 @@ footer {
   /* background: gray; */
 }
 .secTbl {
-  margin: 20px;
+  margin: 0 auto;
 }
+.item {
+  display: flex;
+}
+.item .userId {
+  display: inline;
+}
+.item .secret {
+  display: inline;
+}
+.item .time {
+  display: inline;
+}
+/* body .modal-open {
+  overflow: visible;
+}
+body .modal.in {
+  overflow: visible;
+} */

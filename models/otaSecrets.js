@@ -16,6 +16,11 @@ const schema = new Schema({
     type: Date,
     require: true,
     default: new Date()
+  },
+  isCurrent: {
+    type: Boolean,
+    require: true,
+    default: false
   }
 }, {
   toJSON: {

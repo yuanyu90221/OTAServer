@@ -19,6 +19,8 @@ router.post('/authenticate', (req, res, next) => {
         if ( !result[0] || result[0].passwd.content !== CodeManager.encryptIV(req.body.passwd).content) {
           res.json({err: 'Authentication Error'})
         } else {
+          // console.log(res.locals.secret)
+          let secret = res.locals.secret | SECRET
           let user = {username: result[0].username, role: result[0].role}
           let token = jwt.sign(user, SECRET, {
             expiresIn: 60 * 60 * 24
@@ -55,8 +57,27 @@ router.use(function( req, res, next){
 
 
 router.get('/getAllSecrets', (req, res, next) => {
+  console.log(req.query)
   OTASecretsDao.getAllSecrets((err, allSecrets) => {
     res.json({data: allSecrets})
+  })
+})
+
+router.get('/currentSecret', (req, res) => {
+  OTASecretsDao.getCurrentSecret({isCurrent: true}, (err, result) => {
+    console.log(result[0].secret)
+    res.json({secret: result[0].secret})
+  })
+})
+router.post('/modifySecret', (req, res, next) => {
+  let {userId, secret} = req.body
+  OTASecretsDao.upsertSecret(userId, secret, true, (err, result) => {
+    if (err) { res.json({err: err.message}) }
+    else {
+      res.locals.secret = secret
+      let { modifiedDate } = result 
+      res.json({data: [{userId: userId, secret: secret, modifiedDate: modifiedDate}]})
+    }
   })
 })
 module.exports = router

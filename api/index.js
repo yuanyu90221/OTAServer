@@ -5,6 +5,18 @@ const {info, warn, error} = require('../logger/log4js')
 const OTAUsersDao = require('../dao/otaUsers').OTAUsersDao
 const otaSecrets = require('../api/otaSecrets')
 const axios = require('axios')
+const {OTASecretsDao} = require('../dao/otaSecrets')
+router.use('/', (req, res, next) => {
+  OTASecretsDao.getCurrentSecret({isCurrent:true}, (err, result) => {
+    if(err) {{return res.json({err: err.message})}}
+    if(result[0])
+    {
+      console.log(result[0].secret)
+      res.locals.secret = result[0].secret
+    }
+    next()
+  })
+})
 router.get('/users', (req, res, next) =>{
   OTAUsersDao.findUser({}, (err, otaUsers) => {
     res.json({data: otaUsers})  

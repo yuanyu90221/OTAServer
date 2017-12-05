@@ -45,6 +45,7 @@ $(document).ready(function(){
   $('#getAllSecrets').off('click')
   $('#getAllSecrets').on('click', function(e){
     console.log('click All Secrets')
+    // alert('test')
     getAllSecrets()
   })
 })
