@@ -6,6 +6,9 @@ const {OTASecretsDao} = require('../dao/otaSecrets')
 const {OTAUsersDao} = require('../dao/otaUsers')
 const {SECRET} = require('../config/constants.json')
 const CodeManager = require('../util/codeManager')
+/**
+ * get authentication token
+ */
 router.post('/authenticate', (req, res, next) => {
   OTAUsersDao.findUser({
     username: req.body.username
@@ -42,6 +45,9 @@ router.post('/authenticate', (req, res, next) => {
     }
   })
 })
+/**
+ * jwt token
+ */
 router.use(function( req, res, next){
   // ADD jwt token
   let token = req.body.token || req.query.token || req.headers['x-access-token']
@@ -67,7 +73,9 @@ router.use(function( req, res, next){
   }
 })
 
-
+/**
+ * get Secrets method
+ */
 router.get('/getAllSecrets', (req, res, next) => {
   console.log(req.query)
   OTASecretsDao.getAllSecrets((err, allSecrets) => {

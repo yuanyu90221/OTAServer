@@ -2,9 +2,6 @@ $(document).ready(function(){
   $('.form-modify').off('submit')
   $('.form-modify').submit(function(e) {
     e.preventDefault()
-    console.log(this.secret.value)
-    console.log(this.userId.value)
-    console.log(this.keyNum.value)
     $('#processing-modal').modal('show')
     $.ajax({
       type: 'POST',
@@ -29,6 +26,12 @@ $(document).ready(function(){
     })
   })
 })
+/**
+ * fill data into datatable
+ * 
+ * @param {*} data 
+ * @param {*} index 
+ */
 function fillInData(data, index) {
   return '<div class="well" id="secret' + index+ '">'
   + '<div class="item"><label>UserId:</label><div class="userId">' + data.userId + '</div></div>'
@@ -52,7 +55,11 @@ function appendData(data) {
     contentSpace.append(fillInData(content, index))
   })
 }
-
+/**
+ * update Secret to Modify Modal
+ * 
+ * @param {*} index 
+ */
 function updateSecret(index) {
   $('#editForm input[name="secret"]').val($('#secret' + index + ' .secret').text())
   $('#editForm input[name="userId"]').val($('#secret' + index + ' .userId').text())
