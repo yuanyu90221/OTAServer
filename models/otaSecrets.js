@@ -21,6 +21,11 @@ const schema = new Schema({
     type: Boolean,
     require: true,
     default: false
+  },
+  keyNum: {
+    type: Number,
+    require: true,
+    default: -1
   }
 }, {
   toJSON: {
