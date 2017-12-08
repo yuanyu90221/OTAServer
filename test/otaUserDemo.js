@@ -20,6 +20,6 @@ const {SECRET} = require('../config/constants.json')
 // {passwd: encryptText}, function(err, result){
 //   console.log(result)
 // })
-OTASecretsDao.upsertSecret(1, SECRET, false, (err, result)=>{
+OTASecretsDao.upsertSecret(1, SECRET, 1, true, (err, result)=>{
   console.log(result)
 })

@@ -36,6 +36,8 @@ const schema = new Schema({
       delete ret.__v
     }
   }
+}, {
+  versionKey: false
 })
 const OTAUsers = conn.model('OTAUsers', schema, 'otaUsers')
 module.exports.OTAUsers =  OTAUsers

@@ -40,6 +40,8 @@ const schema = new Schema({
       delete ret.__v
     }
   }
+}, {
+  versionKey: false
 })
 const OTASecrets = conn.model('OTASecrets', schema, 'otaSecrets')
 module.exports.OTASecrets =  OTASecrets
