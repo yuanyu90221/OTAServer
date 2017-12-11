@@ -6,7 +6,14 @@ const OTAUsersDao = require('../dao/otaUsers').OTAUsersDao
 const otaSecrets = require('../api/otaSecrets')
 const axios = require('axios')
 const {OTASecretsDao} = require('../dao/otaSecrets')
-
+router.post('/sessionsStatus', (req, res, next) => {
+  // const {username} = req.body
+  const result = global.sessionMap.find((session, index)=> {
+    return index === 0
+  })
+  console.log(result)
+  res.json({'session': result})
+})
 router.get('/users', (req, res, next) =>{
   OTAUsersDao.findUser({}, (err, otaUsers) => {
     res.json({data: otaUsers})  
@@ -29,6 +36,10 @@ router.post('/user', (req, res) => {
       } else {
         req.session.authUser = {username: data.username, role: data.role, token: data.token}
         console.log(req.session)
+        console.log(`sessionMap`)
+        global.sessionMap = global.sessionMap || []
+        global.sessionMap.push(req.session.authUser)
+        console.log(global.sessionMap)
         res.json({token: data.token, username: data.username, role: data.role})
       }
     }).catch(err=> {

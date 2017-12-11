@@ -44,6 +44,7 @@ app.use(express.static(path.join(__dirname,'/')))
 app.use('/static', express.static('static'))
 app.set('port', port)
 app.set('SECRET', SECRET)
+app.locals.sessionMap = []
 // import api that we use
 app.use("/api", api)
 app.locals.session = {}
