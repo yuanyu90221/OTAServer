@@ -31,18 +31,15 @@ app.use((req, res, next) => {
   let keyNum = req.body.number || req.query.number || req.headers['number'] || 1
   OTASecretsDao.getCurrentSecret({isCurrent: true, keyNum: keyNum}, (err, result) => {
     console.log(result[0].secret)
-    // res.json({secret: result[0].secret})
-     if(!err) {
-      // res.locals.secret = result[0].secret
-      // global.secret = result[0].secret
+    if (!err) {  
       app.locals.secret = result[0].secret
     }
     next()
   })
 })
 app.use(favicon(path.join(__dirname,'favicon.ico')))
-app.use(express.static(path.join(__dirname,'/')))
-app.use('/static', express.static('static'))
+app.use(express.static(path.join(__dirname,'/dist')))
+app.use('/static', express.static(path.join(__dirname, '/dist')))
 app.set('port', port)
 app.set('SECRET', SECRET)
 app.locals.sessionMap = []

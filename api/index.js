@@ -50,6 +50,11 @@ router.post('/user', (req, res) => {
     res.status(403).json({err: 'No provided username and passwd'})
   }
 })
+
+router.post('/logout', (req, res) => {
+  delete req.session.authUser
+  res.redirect('/')
+})
 router.use(otaSecrets)
 router.use(otaRoute)
 module.exports = router
