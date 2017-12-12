@@ -3,15 +3,16 @@ const router = Router()
 const jwt = require('jsonwebtoken')
 const {info, warn, error} = require('../logger/log4js')
 const OTAUsersDao = require('../dao/otaUsers').OTAUsersDao
-const otaSecrets = require('../api/otaSecrets')
+const otaSecrets = require('./otaSecrets')
 const axios = require('axios')
 const {OTASecretsDao} = require('../dao/otaSecrets')
+const otaRoute = require('./otaRoute')
 router.post('/sessionsStatus', (req, res, next) => {
   // const {username} = req.body
   const result = global.sessionMap.find((session, index)=> {
     return index === 0
   })
-  console.log(result)
+  info.info(result)
   res.json({'session': result})
 })
 router.get('/users', (req, res, next) =>{
@@ -22,8 +23,8 @@ router.get('/users', (req, res, next) =>{
   })
 })
 router.post('/user', (req, res) => {
-  console.log(`req.body`)
-  console.log(req.body)
+  info.info(`req.body`)
+  info.info(req.body)
   if(req.body.username && req.body.passwd) {
     return axios.post('http://localhost:7000/api/authenticate',{
         username: req.body.username,
@@ -35,11 +36,11 @@ router.post('/user', (req, res) => {
         res.json({err: data.err})
       } else {
         req.session.authUser = {username: data.username, role: data.role, token: data.token}
-        console.log(req.session)
-        console.log(`sessionMap`)
+        info.info(req.session)
+        info.info(`sessionMap`)
         global.sessionMap = global.sessionMap || []
         global.sessionMap.push(req.session.authUser)
-        console.log(global.sessionMap)
+        info.info(global.sessionMap)
         res.json({token: data.token, username: data.username, role: data.role})
       }
     }).catch(err=> {
@@ -50,4 +51,5 @@ router.post('/user', (req, res) => {
   }
 })
 router.use(otaSecrets)
+router.use(otaRoute)
 module.exports = router

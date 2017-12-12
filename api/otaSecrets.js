@@ -25,9 +25,9 @@ router.post('/authenticate', (req, res, next) => {
         })
         .then((data) => {
           if (data && data[0]) {
-            console.log(`secret`,data[0].secret)
+            info.info(`secret`,data[0].secret)
             let secret = (data[0].secret) ? data[0].secret:SECRET
-            console.log(secret)
+            info.info(secret)
             let user = {username: result[0].username, role: result[0].role}
             let token = jwt.sign(user, secret, {
               expiresIn: 60 * 60 * 24
@@ -53,11 +53,12 @@ router.use(function( req, res, next){
   // ADD jwt token
   let token = req.body.token || req.query.token || req.headers['x-access-token']
   let keyNum = req.body.number || req.query.number || req.headers['number'] || 1
-  console.log(token, keyNum)
+  info.info(token, keyNum)
   if (token && !Number.isNaN(keyNum)) {
     OTASecretsDao.getCurrentSecret({isCurrent: true, keyNum}, (err, result) => {
       return result[0].secret
     }).then((data) => {
+      info.info(data[0].secret)
       if (data && data[0]) {   
         let secret = (data[0].secret) ? data[0].secret:SECRET
         jwt.verify(token, secret, function(err, decoded) {
@@ -92,7 +93,7 @@ router.get('/getAllSecrets', (req, res, next) => {
  */
 router.get('/currentSecret', (req, res) => {
   OTASecretsDao.getCurrentSecret({isCurrent: true}, (err, result) => {
-    console.log(result[0].secret)
+    info.info(result[0].secret)
     res.json({secret: result[0].secret})
   })
 })
@@ -107,17 +108,17 @@ router.post('/modifySecret', (req, res, next) => {
       global.secret = secret
       let { modifiedDate } = result
       keyNum = keyNum || 1
-      OTASecretsDao.getCurrentSecret({isCurrent: true})
+      OTASecretsDao.getCurrentSecret({isCurrent: true, keyNum: keyNum})
       .then((data) => {
         if (data && data[0]) {
-          console.log(`secret:`)
-          console.log(data[0].secret) 
+          info.info(`secret:`)
+          info.info(data[0].secret) 
           let KeySign = data[0].secret
           OTAUsersDao.findUser({userId:userId},(err, result)=>{
             return result[0]
           }).then((data) => {
-            console.log(`userData:`)
-            console.log(data[0])
+            info.info(`userData:`)
+            info.info(data[0])
             let {username, role} = data[0]
             let user = {username: username, role: role}
             let token = jwt.sign(user, KeySign, {

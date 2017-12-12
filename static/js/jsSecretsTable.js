@@ -13,7 +13,7 @@ $(document).ready(function(){
         token: window.token
       },
       success: function(data) {
-        console.log(data)
+        // console.log(data)
         window.token = data.data[0].token
         getAllSecrets()
         $('#processing-modal').modal('hide')
