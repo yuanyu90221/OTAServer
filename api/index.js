@@ -9,11 +9,16 @@ const {OTASecretsDao} = require('../dao/otaSecrets')
 const otaRoute = require('./otaRoute')
 router.post('/sessionsStatus', (req, res, next) => {
   // const {username} = req.body
-  const result = global.sessionMap.find((session, index)=> {
-    return index === 0
-  })
-  info.info(result)
-  res.json({'session': result})
+  if (global.sessionMap) {
+    const result = global.sessionMap.find((session, index)=> {
+      return index === 0
+    })
+    info.info(result)
+    res.json({'session': result})
+  }
+  else {
+    res.json({'session': null})
+  }
 })
 router.get('/users', (req, res, next) =>{
   OTAUsersDao.findUser({}, (err, otaUsers) => {

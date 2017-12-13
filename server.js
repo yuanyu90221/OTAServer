@@ -38,10 +38,11 @@ app.use((req, res, next) => {
   })
 })
 app.use(favicon(path.join(__dirname,'favicon.ico')))
-app.use(express.static(path.join(__dirname,'/dist')))
-app.use('/static', express.static(path.join(__dirname, '/dist')))
+app.use(express.static(__dirname))
+app.use('/static', express.static(path.join(__dirname, 'static')))
 app.set('port', port)
 app.set('SECRET', SECRET)
+global.sessionMap = []
 app.locals.sessionMap = []
 // import api that we use
 app.use("/api", api)
