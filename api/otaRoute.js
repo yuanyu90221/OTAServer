@@ -39,25 +39,26 @@ router.post('/challenge', decodeWithSign, (req, res) => {
   let {cwid} = res.locals.decoded
   info.info(`cwid: ${cwid}`)
   let challenge = otaManager.genChallenge(cwid)
-  OTACardsDAO.upsertCard(cwid, {challenge: challenge}, false, (err, result) => {
-    if (err) { res.status(403).json({err: `${cwid} challenge gen error ${err.message}`})}
-  }).then((data)=> {
-    // info.info(data.challenge)
-    let {challenge} = data[0]
-    OTASecretsDao.getCurrentSecret({keyNum: keyNum, isCurrent: true}, (err, result)=> {
-      if (err) { res.status(403).json({err: err.message})}
-    })
-    .then((data) => {
-      if (data || data[0] || data[0].secret) {
-        let {secret} = data[0]
-        let token = jwt.sign({challenge: challenge}, secret, {expiresIn: '1h'})
-        res.json({challenge: token})
-      }
-      else {
-        res.status(405).json({err:'no secret found'})
-      }
+  OTACardsDAO.findCardByCwId(cwid).then(data1 => {
+    let isUpdate = (data1 && data1[0])? true: false
+    OTACardsDAO.upsertCard(cwid, {challenge: challenge}, isUpdate, (err, result) => {
+      if (err) { res.status(403).json({err: `${cwid} challenge gen error ${err.message}`})}
+      OTASecretsDao.getCurrentSecret({keyNum: keyNum, isCurrent: true}, (err, result)=> {
+        if (err) { res.status(403).json({err: err.message})}
+      })
+      .then((data) => {
+        if (data || data[0] || data[0].secret) {
+          let {secret} = data[0]
+          let token = jwt.sign({challenge: challenge}, secret, {expiresIn: '1h'})
+          res.json({challenge: token})
+        }
+        else {
+          res.status(405).json({err:'no secret found'})
+        }
+      })
     })
   })
+  
 })
 
 // 2 set cryptogram and reply key

@@ -10,7 +10,7 @@ const schema = new Schema({
   createDate: {
     type: Date,
     require: true,
-    default: Date.now()
+    default: Date.now
   },
   challenge: {
     type: String,

@@ -15,7 +15,7 @@ const schema = new Schema({
   modifiedDate: {
     type: Date,
     require: true,
-    default: new Date()
+    default: Date.now
   },
   isCurrent: {
     type: Boolean,
