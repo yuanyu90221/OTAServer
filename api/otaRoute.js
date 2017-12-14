@@ -38,7 +38,7 @@ router.post('/challenge', decodeWithSign, (req, res) => {
   // info.info(JSON.stringify(res.locals.decoded))
   let {cwid} = res.locals.decoded
   info.info(`cwid: ${cwid}`)
-  let challenge = otaManager.genChallenge(cwid)
+  let challenge = otaManager.derivedRandom()
   OTACardsDAO.findCardByCwId(cwid).then(data1 => {
     let isUpdate = (data1 && data1[0])? true: false
     OTACardsDAO.upsertCard(cwid, {challenge: challenge}, isUpdate, (err, result) => {
@@ -49,7 +49,7 @@ router.post('/challenge', decodeWithSign, (req, res) => {
       .then((data) => {
         if (data || data[0] || data[0].secret) {
           let {secret} = data[0]
-          let token = jwt.sign({challenge: challenge}, secret, {expiresIn: '1h'})
+          let token = jwt.sign({challenge: otaManager.genReplyChallenge(challenge)}, secret, {expiresIn: '1h'})
           res.json({challenge: token})
         }
         else {

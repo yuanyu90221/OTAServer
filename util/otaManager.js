@@ -8,9 +8,9 @@ const derivedRandom = () => {
 const otaManager = {
   derivedRandom: derivedRandom,
   // first challenge create into db
-  genChallenge: (cwid) => {
+  genReplyChallenge: (challenge) => {
     // do Fake challenge
-    return INIT_UPDATE_CMD + derivedRandom() + INIT_UPDATE_CMD_PAD
+    return INIT_UPDATE_CMD + challenge + INIT_UPDATE_CMD_PAD
   }
 }
 

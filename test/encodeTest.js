@@ -23,9 +23,9 @@ let secret1 = 'a589bf4a2883cecf610785c49623e1'
 // let token = jwt.sign({username: 'yuanyu', role: 'admin'}, secret, {expiresIn: '2h'})
 let token = jwt.sign({cwid:'00112233'}, secret, {expiresIn: '1h'})
 console.log(token)
-let returnPL = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2UiOiI4MDUwMDEwODg2Zjc5ZDM4ZTUxNGVkMjcwMCIsImlhdCI6MTUxMzIxNzE4OSwiZXhwIjoxNTEzMjIwNzg5fQ.cugtisvxCiA6rkug_mswH0bnVB_KjTfRawxyOxsPbq4'
+let returnPL = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFsbGVuZ2UiOiI4MDUwMDEwODUxOWNlYWIzODNkZTRjOGQwMCIsImlhdCI6MTUxMzIyMzA5MywiZXhwIjoxNTEzMjI2NjkzfQ.SDHnNH-Qzw5dHR2YLqTsDTdel6LFTR7ryxE-AiBesvU'
 jwt.verify(returnPL, secret, (err, decoded) => {
    console.log(decoded)
 })
-let cryptogram =  jwt.sign({cryptogram:'0000726501898398816801020002D9857D532F04A7CA64FD03DE4DCA9000', cwid:'00112233'}, secret1, {expiresIn:'1h'})
+let cryptogram =  jwt.sign({cryptogram:'0000726501898398816801020002D9857D532F04A7CA64FD03DE4DCA9000', cwid:'00112233'}, secret, {expiresIn:'1h'})
 console.log(cryptogram)
