@@ -1,21 +1,21 @@
 # OTAServer
-+ purpose
-+   middleware for Oneline Upated control
+# 1. purpose
++ middleware for Oneline Upated control
 
-# frameWork
+# 2. frameWork
 + express
 + mongoose
 + jwt
 
-# installation
+# 3. installation
 + npm install
 
-# todo
+# 4. todo
 + 1 add Docker file
 
-# Run 
+# 5. Run 
 + node server.js
 
-# Setup configuration for MongoDB, SECRET
+# 6. Setup configuration for MongoDB, SECRET
 + config/mongoDBConfig.json
 + config/constants.json
