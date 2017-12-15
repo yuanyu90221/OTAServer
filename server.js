@@ -12,7 +12,6 @@ const api = require('./api')
 const path = require('path')
 const {OTASecretsDao} = require('./dao/otaSecrets')
 const cors = require('cors')
-// const redis = require('redis')
 app.use(cors())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
@@ -31,7 +30,7 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   let keyNum = req.body.number || req.query.number || req.headers['number'] || 1
   OTASecretsDao.getCurrentSecret({isCurrent: true, keyNum: keyNum}, (err, result) => {
-    console.log(result[0].secret)
+    info.info(result[0].secret)
     if (!err) {  
       app.locals.secret = result[0].secret
     }

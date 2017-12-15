@@ -2,7 +2,6 @@ const {Router} = require('express')
 const router = Router()
 const jwt = require('jsonwebtoken')
 const {info, warn, error} = require('../logger/log4js')
-const {OTACardsDAO} = require('../dao/otaCards')
 const {OTASecretsDao} = require('../dao/otaSecrets')
 const {otaManager} = require('../util/otaManager')
 const {client} = require('../redis/index')
@@ -42,7 +41,6 @@ router.post('/challenge', decodeWithSign, (req, res) => {
     "challenge":  challenge,
     "createDate": new Date()
   } , (err, reply) => {
-    // client.quit()
     if (err) {
       client.quit()
       error.error(`${cwid} challenge gen error ${err.message}`)
@@ -77,16 +75,24 @@ router.post('/cryptogram', decodeWithSign, (req, res) => {
       res.status(403).json({err: `${cwid} insert cryptogram gen error ${err.message}`})
     }
     else {
+      // get the challenge and crytpgram send back to lamda
+      client.hgetall(cwid, (err, result) => {
+        info.info(result)
+      })
       // default expire time 1 day
       client.expire(cwid, 3600*24)
       let {keyNum} = req.body
       OTASecretsDao.getCurrentSecret({keyNum: keyNum, isCurrent: true}, (err, result)=> {
-        if (err) { res.status(403).json({err: err.message})}
+        if (err) {
+          error.error(err.message) 
+          res.status(403).json({err: err.message})
+        }
       })
       .then((data) => {
         if (data || data[0] || data[0].secret) {
           let {secret} = data[0]
           let token = jwt.sign({cryptogram: cryptogram}, secret, {expiresIn: '1h'})
+          info.info(`cryptogram: ${token}`)
           res.json({cryptogram: token})
         }
         else {

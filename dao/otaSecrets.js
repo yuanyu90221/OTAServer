@@ -16,12 +16,10 @@ const OTASecretsDao = {
         }).then(data=>{
           info.info(data)
           if(isUpdate || (data && data.length!==0)) {
-            console.log('data update')
             info.info('data update')
             return OTASecrets.findOneAndUpdate({userId: userId, keyNum: keyNum}, {$set: {secret: secret, modifiedDate: new Date()}} , callback)
           }
           else {
-            console.log('data insert')
             info.info('data insert')
             counter.findByIdAndUpdate({_id:'keyNum'},{$inc: {seq: 1}}).then((data) =>{
               return data.seq
