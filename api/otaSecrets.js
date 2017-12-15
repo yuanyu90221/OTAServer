@@ -102,7 +102,9 @@ router.get('/getAllSecrets', (req, res, next) => {
  * 取得目前的 SECRET
  */
 router.get('/currentSecret', (req, res) => {
-  OTASecretsDao.getCurrentSecret({isCurrent: true}, (err, result) => {
+  let {keyNum} = req.body
+  keyNum = keyNum || 1
+  OTASecretsDao.getCurrentSecret({isCurrent: true, keyNum: keyNum}, (err, result) => {
     info.info(result[0].secret)
     res.json({secret: result[0].secret})
   })
