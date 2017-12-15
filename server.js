@@ -12,6 +12,7 @@ const api = require('./api')
 const path = require('path')
 const {OTASecretsDao} = require('./dao/otaSecrets')
 const cors = require('cors')
+// const redis = require('redis')
 app.use(cors())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
@@ -46,6 +47,10 @@ global.sessionMap = []
 app.locals.sessionMap = []
 // import api that we use
 app.use("/api", api)
+// set up refresh default route
+app.use('/*', (req, res) => {
+  res.redirect('/')
+})
 app.locals.session = {}
 app.listen(port, host, ()=>{
   info.info(`OTA Server start on ${host}:${port}`)

@@ -5,6 +5,7 @@ const {info, warn, error} = require('../logger/log4js')
 const {OTACardsDAO} = require('../dao/otaCards')
 const {OTASecretsDao} = require('../dao/otaSecrets')
 const {otaManager} = require('../util/otaManager')
+const {client} = require('../redis/index')
 // jwt decoded middlewared
 const decodeWithSign = (req, res, next) => {
   let {keyNum, payload} = req.body
@@ -34,15 +35,20 @@ const decodeWithSign = (req, res, next) => {
 router.post('/challenge', decodeWithSign, (req, res) => {
   info.info(`challenge`)
   let {keyNum} = req.body
-  // /info.info(res.locals)
-  // info.info(JSON.stringify(res.locals.decoded))
   let {cwid} = res.locals.decoded
   info.info(`cwid: ${cwid}`)
   let challenge = otaManager.derivedRandom()
-  OTACardsDAO.findCardByCwId(cwid).then(data1 => {
-    let isUpdate = (data1 && data1[0])? true: false
-    OTACardsDAO.upsertCard(cwid, {challenge: challenge}, isUpdate, (err, result) => {
-      if (err) { res.status(403).json({err: `${cwid} challenge gen error ${err.message}`})}
+  client.hmset(cwid, {
+    "challenge":  challenge,
+    "createDate": new Date()
+  } , (err, reply) => {
+    // client.quit()
+    if (err) {
+      client.quit()
+      error.error(`${cwid} challenge gen error ${err.message}`)
+      res.status(405).json({err: `${cwid} challenge gen error ${err.message}`})
+    }
+    else {
       OTASecretsDao.getCurrentSecret({keyNum: keyNum, isCurrent: true}, (err, result)=> {
         if (err) { res.status(403).json({err: err.message})}
       })
@@ -56,18 +62,23 @@ router.post('/challenge', decodeWithSign, (req, res) => {
           res.status(405).json({err:'no secret found'})
         }
       })
-    })
-  })
-  
+    }
+  })  
 })
 
 // 2 set cryptogram and reply key
 router.post('/cryptogram', decodeWithSign, (req, res) => {
   let {cryptogram, cwid} = res.locals.decoded
   info.info(`cryptogram: ${cryptogram} for cwid: ${cwid}`)
-  OTACardsDAO.upsertCard(cwid, {cryptogram: cryptogram}, true, (err, result)=> {
-    if (err) { res.status(403).json({err: `${cwid} insert cryptogram gen error ${err.message}`}) }
+  client.hset(cwid, 'cryptogram', `${cryptogram}`, (err, reply) => {
+    if (err) {
+      client.quit()
+      error.error(`${cwid} insert cryptogram gen error ${err.message}`)
+      res.status(403).json({err: `${cwid} insert cryptogram gen error ${err.message}`})
+    }
     else {
+      // default expire time 1 day
+      client.expire(cwid, 3600*24)
       let {keyNum} = req.body
       OTASecretsDao.getCurrentSecret({keyNum: keyNum, isCurrent: true}, (err, result)=> {
         if (err) { res.status(403).json({err: err.message})}
