@@ -25,7 +25,7 @@ router.post('/authenticate', (req, res, next) => {
         })
         .then((data) => {
           if (data && data[0]) {
-            info.info(`secret`,data[0].secret)
+            info.info(`secret `,data[0].secret)
             let secret = (data[0].secret) ? data[0].secret:SECRET
             info.info(secret)
             let user = {username: result[0].username, role: result[0].role}
@@ -42,7 +42,7 @@ router.post('/authenticate', (req, res, next) => {
             res.status(403).json({err: `sign key not found`})
           }
         })  
-      } 
+      }
     }
   })
 })
@@ -124,7 +124,7 @@ router.post('/modifySecret', (req, res, next) => {
           info.info(`secret:`)
           info.info(data[0].secret) 
           let KeySign = data[0].secret
-          OTAUsersDao.findUser({userId:userId},(err, result)=>{
+          OTAUsersDao.findUser({userId:userId}, (err, result)=> {
             return result[0]
           }).then((data) => {
             info.info(`userData:`)
