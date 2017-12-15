@@ -61,15 +61,9 @@ router.use(function( req, res, next){
       info.info(data[0].secret)
       if (data && data[0]) {   
         let secret = (data[0].secret) ? data[0].secret:SECRET
-        jwt.verify(token, secret, function(err, decoded) {
-          if (err) {
-            res.json({err: 'fail to authentication'})
-          } else {
-            res.decoded = decoded
-            info.info(`decoded`, decoded)
-            next()
-          }
-        })
+        res.locals.secret = secret
+        res.locals.token = token
+        next()
       }
       else {
         res.statu(403).json({err: 'fail to authentication, key not match'})
@@ -79,7 +73,23 @@ router.use(function( req, res, next){
     res.status(403).json({err: 'token not provideds'})
   }
 })
-
+/**
+ * jwt decode
+ */
+router.use(function(req, res, next) {
+  let {secret, token} = res.locals
+  info.info(secret, token)
+  secret = secret || SECRET
+  jwt.verify(token, secret, function(err, decoded) {
+    if (err) {
+      res.json({err: 'fail to authentication'})
+    } else {
+      res.decoded = decoded
+      info.info(`decoded`, decoded)
+      next()
+    }
+  })
+})
 /**
  * get Secrets method
  */
