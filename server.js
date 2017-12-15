@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken')
 const express = require('express')
 const app = express()
-const port = process.env.PORT || 7000
-const host = process.env.HOST || '127.0.0.1'
 const bodyParser = require('body-parser')
 const {SECRET} = require('./config/constants.json')
 const {info, warn, error} = require('./logger/log4js')
@@ -40,7 +38,6 @@ app.use((req, res, next) => {
 app.use(favicon(path.join(__dirname,'favicon.ico')))
 app.use(express.static(__dirname))
 app.use('/static', express.static(path.join(__dirname, 'static')))
-app.set('port', port)
 app.set('SECRET', SECRET)
 global.sessionMap = []
 app.locals.sessionMap = []
@@ -51,6 +48,4 @@ app.use('/*', (req, res) => {
   res.redirect('/')
 })
 app.locals.session = {}
-app.listen(port, host, ()=>{
-  info.info(`OTA Server start on ${host}:${port}`)
-})
+module.exports = app
