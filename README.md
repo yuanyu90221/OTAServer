@@ -19,3 +19,6 @@
 # 6. Setup configuration for MongoDB, SECRET
 + config/mongoDBConfig.json
 + config/constants.json
+
+# 7. Test
++ npm run test
