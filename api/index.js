@@ -8,10 +8,12 @@ const axios = require('axios')
 const {OTASecretsDao} = require('../dao/otaSecrets')
 const otaRoute = require('./otaRoute')
 router.post('/sessionsStatus', (req, res, next) => {
-  // const {username} = req.body
+  const {username} = req.body
+  // console.log(username)
   if (global.sessionMap) {
     const result = global.sessionMap.find((session, index)=> {
-      return index === 0
+      // console.log(session)
+      return session.username && session.username === username
     })
     info.info(result)
     res.json({'session': result})
