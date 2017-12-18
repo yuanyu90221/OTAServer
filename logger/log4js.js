@@ -1,7 +1,7 @@
 // Set Logger
 let log4js = require('log4js')
 let moment = require('moment')
-let outputTimeFormat = moment().format("YYYY-MM-DD-HH-mm-ss")
+let outputTimeFormat = moment().format("YYYY-MM-DD HH-mm-ss")
 // log4js Appender的設定
 log4js.configure({
   appenders:[
