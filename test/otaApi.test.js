@@ -1,5 +1,4 @@
 const server = require('../server.js')
-// const jest = require('jest')
 const superagent = require('supertest')
 const app = server.listen(8100)
 const jwt = require('jsonwebtoken')
@@ -27,7 +26,6 @@ describe('OTAs API TEST', () => {
   })
 
   test('/api/cryptogram', (done) => {
-    
     getCryptogram(SECRET, done)
   })
 })
