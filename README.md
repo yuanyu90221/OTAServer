@@ -14,7 +14,7 @@
 + 1 add Docker file
 
 # 5. Run 
-+ node server.js
++ npm start
 
 # 6. Setup configuration for MongoDB, SECRET
 + config/mongoDBConfig.json
