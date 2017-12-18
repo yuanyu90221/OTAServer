@@ -36,7 +36,7 @@ app.use((req, res, next) => {
   })
 })
 app.use(favicon(path.join(__dirname,'favicon.ico')))
-app.use(express.static(__dirname))
+app.use('/',express.static(__dirname))
 app.use('/static', express.static(path.join(__dirname, 'static')))
 app.set('SECRET', SECRET)
 global.sessionMap = []

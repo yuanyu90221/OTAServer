@@ -20,10 +20,10 @@ let result4 = CodeManager.decryptIV(result3)
 console.log(result4)
 let secret = 'd579bf4a2883cecf610785c49623e1'
 let secret1 = 'a589bf4a2883cecf610785c49623e1'
-let token = jwt.sign({username: 'yuanyu', role: 'admin'}, secret, {expiresIn: '2h'})
-// let token = jwt.sign({cwid:'00112233'}, secret, {expiresIn: '1h'})
+// let token = jwt.sign({username: 'yuanyu', role: 'admin'}, secret, {expiresIn: '2h'})
+let token = jwt.sign({cwid:'00112233'}, secret, {expiresIn: '1h'})
 console.log(token)
-let returnPL = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcnlwdG9ncmFtIjoiMDAwMDcyNjUwMTg5ODM5ODgxNjgwMTAyMDAwMkQ5ODU3RDUzMkYwNEE3Q0E2NEZEMDNERTREQ0E5MDAwIiwiaWF0IjoxNTEzMzA5NDEzLCJleHAiOjE1MTMzMTMwMTN9.GA_ih7vN8ATRTW47o_shOVe5KtjurX9hEDHdb2_zlYc'
+let returnPL = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcnlwdG9ncmFtIjoiMDAwMDcyNjUwMTg5ODM5ODgxNjgwMTAyMDAwMkQ5ODU3RDUzMkYwNEE3Q0E2NEZEMDNERTREQ0E5MDAwIiwiaWF0IjoxNTEzNTcwOTM2LCJleHAiOjE1MTM1NzQ1MzZ9.Eczu0vuS5OF-1ILOQWniQJbC0VEZ0Lg9NNj_Gp-JcGQ'
 jwt.verify(returnPL, secret, (err, decoded) => {
    console.log(decoded)
 })

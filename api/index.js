@@ -60,6 +60,7 @@ router.post('/logout', (req, res) => {
   delete req.session.authUser
   res.redirect('/')
 })
-router.use(otaSecrets)
 router.use(otaRoute)
+router.use(otaSecrets)
+
 module.exports = router
