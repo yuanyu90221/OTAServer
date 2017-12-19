@@ -1,19 +1,15 @@
 const {Router} = require('express')
 const router = Router()
-const jwt = require('jsonwebtoken')
 const {info, warn, error} = require('../logger/log4js')
-const OTAUsersDao = require('../dao/otaUsers').OTAUsersDao
-const otaSecrets = require('./otaSecrets')
-const axios = require('axios')
-const {OTASecretsDao} = require('../dao/otaSecrets')
+const {OTAUsersDao} = require('../dao/otaUsers')
 const otaRoute = require('./otaRoute')
+const otaSecrets = require('./otaSecrets')
 let {authChecker, tokenVerifierNext} = require('./authChecker')
+
 router.post('/sessionsStatus', (req, res, next) => {
   const {username} = req.body
-  // console.log(username)
   if (global.sessionMap) {
     const result = global.sessionMap.find((session, index)=> {
-      // console.log(session)
       return session.username && session.username === username
     })
     info.info(result)
@@ -23,6 +19,7 @@ router.post('/sessionsStatus', (req, res, next) => {
     res.json({'session': null})
   }
 })
+
 router.get('/users', (req, res, next) =>{
   OTAUsersDao.findUser({}, (err, otaUsers) => {
     res.json({data: otaUsers})  
@@ -30,6 +27,7 @@ router.get('/users', (req, res, next) =>{
     res.json({err: err.message})
   })
 })
+
 router.post('/user', authChecker, tokenVerifierNext, (req, res) => {
   info.info(`res.locals.authUser`)
   info.info(res.locals.authUser)
@@ -44,6 +42,17 @@ router.post('/user', authChecker, tokenVerifierNext, (req, res) => {
 })
 
 router.post('/logout', (req, res) => {
+  let {authUser} = req.session
+  if (authUser) {
+    let {username} = authUser
+    username = username || ''
+    if (username === '') {
+      global.sessionMap = global.sessionMap.filter((session, index)=> {
+        return session.username !== username
+      })
+      console.log(global.sessionMap)
+    }
+  }
   delete req.session.authUser
   res.redirect('/')
 })

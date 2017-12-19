@@ -4,6 +4,7 @@ const {info, warn, error} = require('../logger/log4js')
 const {OTASecretsDao} = require('../dao/otaSecrets')
 const {OTAUsersDao} = require('../dao/otaUsers')
 const CodeManager = require('../util/codeManager')
+// auth check middleware
 const authChecker = (req, res, next) => {
   let {username} = req.body 
   username = username || ''
@@ -25,6 +26,7 @@ const authChecker = (req, res, next) => {
     res.json({err: err.message})
   })
 }
+// token handler
 const tokenVerifier = (req, res, next) => {
   let {number, keyNum} = req.body
   let {result} = res.locals
@@ -57,7 +59,7 @@ const tokenVerifier = (req, res, next) => {
     res.status(400).json({err: err.message})
   })
 }
-
+// token generator middleware
 const tokenVerifierNext = (req, res, next) => {
   let {number, keyNum} = req.body
   let {result} = res.locals
@@ -77,12 +79,6 @@ const tokenVerifierNext = (req, res, next) => {
       let token = jwt.sign(user, secret, {
         expiresIn: 60 * 60 * 24
       })
-      // res.json({
-      //   msg: 'token delivered',
-      //   token: token,
-      //   username: result[0].username,
-      //   role: result[0].role
-      // })
       res.locals.authUser = { username: result[0].username, role: result[0].role, token: token}
       next()
     } else {
