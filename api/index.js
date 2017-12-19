@@ -7,6 +7,7 @@ const otaSecrets = require('./otaSecrets')
 const axios = require('axios')
 const {OTASecretsDao} = require('../dao/otaSecrets')
 const otaRoute = require('./otaRoute')
+let {authChecker, tokenVerifierNext} = require('./authChecker')
 router.post('/sessionsStatus', (req, res, next) => {
   const {username} = req.body
   // console.log(username)
@@ -29,33 +30,17 @@ router.get('/users', (req, res, next) =>{
     res.json({err: err.message})
   })
 })
-router.post('/user', (req, res) => {
-  info.info(`req.body`)
-  info.info(req.body)
-  if(req.body.username && req.body.passwd) {
-    return axios.post('http://localhost:7000/api/authenticate',{
-        username: req.body.username,
-        passwd: req.body.passwd
-      }
-    ).then((result)=>{
-      let data = result.data
-      if (data.err) {
-        res.json({err: data.err})
-      } else {
-        req.session.authUser = {username: data.username, role: data.role, token: data.token}
-        info.info(req.session)
-        info.info(`sessionMap`)
-        global.sessionMap = global.sessionMap || []
-        global.sessionMap.push(req.session.authUser)
-        info.info(global.sessionMap)
-        res.json({token: data.token, username: data.username, role: data.role})
-      }
-    }).catch(err=> {
-      res.json({err: err.message})
-    })
-  } else {
-    res.status(403).json({err: 'No provided username and passwd'})
-  }
+router.post('/user', authChecker, tokenVerifierNext, (req, res) => {
+  info.info(`res.locals.authUser`)
+  info.info(res.locals.authUser)
+  let data = res.locals.authUser
+  req.session.authUser = {username: data.username, role: data.role, token: data.token}
+  info.info(req.session)
+  info.info(`sessionMap`)
+  global.sessionMap = global.sessionMap || []
+  global.sessionMap.push(req.session.authUser)
+  info.info(global.sessionMap)
+  res.json({token: data.token, username: data.username, role: data.role})
 })
 
 router.post('/logout', (req, res) => {
