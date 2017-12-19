@@ -78,7 +78,7 @@ router.post('/cryptogram', decodeWithSign, (req, res) => {
       // get the challenge and crytpgram send back to lamda
       client.hgetall(cwid, (err, result) => {
         info.info(result)
-        // FIXME post to get the allowed message to pass to the client
+        // FIXME: post to get the allowed message to pass to the client
         // {hostMsg: xxx, cardMsg: xxx, serialNum: xxxx}
       })
       // default expire time 1 day
