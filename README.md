@@ -10,8 +10,8 @@
 # 3. installation
 + npm install
 
-# 4. todo
-+ 1 add Docker file
+# 4. Docker build
++ docker build . -t ota-server:1.0
 
 # 5. Run 
 + npm start
