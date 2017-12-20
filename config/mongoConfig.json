@@ -1,5 +1,5 @@
 {
-	"domainName":"localhost",
+	"domainName":"10.0.0.62",
 	"port":27017,
 	"user":"yuanyu",
 	"passwd": {
