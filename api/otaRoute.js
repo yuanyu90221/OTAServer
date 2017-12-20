@@ -5,6 +5,8 @@ const {info, warn, error} = require('../logger/log4js')
 const {OTASecretsDao} = require('../dao/otaSecrets')
 const {otaManager} = require('../util/otaManager')
 const {client} = require('../redis/index')
+const lamdaURL = 'https://oq2gce9ea7.execute-api.us-west-2.amazonaws.com/prod/challenge'
+const axios = require('axios')
 // jwt decoded middlewared
 const decodeWithSign = (req, res, next) => {
   let {keyNum, payload} = req.body
@@ -80,27 +82,39 @@ router.post('/cryptogram', decodeWithSign, (req, res) => {
         info.info(result)
         // FIXME: post to get the allowed message to pass to the client
         // {hostMsg: xxx, cardMsg: xxx, serialNum: xxxx}
+        axios.post(lamdaURL, {
+          hostMsg: result.challenge,
+          cardMsg: result.cryptogram,
+          serialNum: cwid
+        }).then(resultData => {
+          if(resultData.data) {
+            // default expire time 1 day
+          
+            client.expire(cwid, 3600*24)
+            let {keyNum} = req.body
+            OTASecretsDao.getCurrentSecret({keyNum: keyNum, isCurrent: true}, (err, result)=> {
+              if (err) {
+                error.error(err.message) 
+                res.status(403).json({err: err.message})
+              }
+            })
+            .then((data) => {
+              if (data || data[0] || data[0].secret) {
+                let {secret} = data[0]
+                let token = jwt.sign({cryptogram: resultData.data}, secret, {expiresIn: '1h'})
+                info.info(`cryptogram: ${token}`)
+                res.json({cryptogram: token})
+              }
+              else {
+                res.status(405).json({err:'no secret found'})
+              }
+            })
+          } else {
+            res.status(405).json({err:'no key find'})
+          }
+        })
       })
-      // default expire time 1 day
-      client.expire(cwid, 3600*24)
-      let {keyNum} = req.body
-      OTASecretsDao.getCurrentSecret({keyNum: keyNum, isCurrent: true}, (err, result)=> {
-        if (err) {
-          error.error(err.message) 
-          res.status(403).json({err: err.message})
-        }
-      })
-      .then((data) => {
-        if (data || data[0] || data[0].secret) {
-          let {secret} = data[0]
-          let token = jwt.sign({cryptogram: cryptogram}, secret, {expiresIn: '1h'})
-          info.info(`cryptogram: ${token}`)
-          res.json({cryptogram: token})
-        }
-        else {
-          res.status(405).json({err:'no secret found'})
-        }
-      })
+      
     }
   })
 })

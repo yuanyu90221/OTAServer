@@ -20,6 +20,7 @@ describe('OTAs API TEST', () => {
     .send({keyNum: 1, payload: token})
     .then((response) => {
       expect(response.statusCode).toBe(200)
+      console.log(response.body)
       expect(response.body).toHaveProperty('challenge')
       done()
     })
