@@ -8,4 +8,6 @@ WORKDIR /usr/app
 
 RUN npm install --production
 
+EXPOSE 7000
+
 CMD ["node","www.js"]
