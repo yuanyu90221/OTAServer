@@ -19,6 +19,7 @@ router.use(function( req, res, next){
   // ADD jwt token
   let token = req.body.token || req.query.token || req.headers['x-access-token']
   let keyNum = req.body.number || req.query.number || req.headers['number'] || 1
+  console.log(keyNum, token)
   info.info(token, keyNum)
   if (token && !Number.isNaN(keyNum)) {
     OTASecretsDao.getCurrentSecret({isCurrent: true, keyNum}, (err, result) => {
@@ -44,10 +45,14 @@ router.use(function( req, res, next){
  */
 router.use(function(req, res, next) {
   let {secret, token} = res.locals
+  console.log(secret)
   info.info(secret, token)
   secret = secret || SECRET
-  jwt.verify(token, secret, function(err, decoded) {
+  console.log(secret)
+  console.log(token.toString('base64'))
+  jwt.verify(token.toString('base64'), secret, function(err, decoded) {
     if (err) {
+      console.log(err.message)
       res.json({err: 'fail to authentication'})
     } else {
       res.decoded = decoded
@@ -102,7 +107,14 @@ router.post('/modifySecret', (req, res, next) => {
             let token = jwt.sign(user, KeySign, {
               expiresIn: 60 * 60 * 24
             })
-            res.json({data: [{userId: userId, secret: KeySign, modifiedDate: modifiedDate, token}]})
+            // update the token to the resign one
+            global.sessionMap.forEach((session, index) => {
+              if (session.username === username) {
+                session.token = token
+              }
+            })
+
+            res.json({data: [{userId: userId, secret: KeySign, modifiedDate: modifiedDate, token: token.toString('base64')}]})
           })
         } else {
           res.status(403).json({err: `secret with keyNum: ${keyNum} is not found`})

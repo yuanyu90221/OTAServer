@@ -75,6 +75,7 @@ const tokenVerifierNext = (req, res, next) => {
       let secret = (data[0].secret) ? data[0].secret:SECRET
       info.info(secret)
       console.log(secret)
+      console.log(result[0])
       let user = {username: result[0].username, role: result[0].role}
       let token = jwt.sign(user, secret, {
         expiresIn: 60 * 60 * 24
